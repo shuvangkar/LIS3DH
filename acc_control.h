@@ -2,14 +2,14 @@
 #define ACC_CONTROL_H_
 
 #include "mspAcc.h"
-#include "mspPayload.h"
+//#include "mspPayload.h"
 
 #define ACC_MAX_POINT 32
 // void accSetBuffer(payload_t **pldBuf);
 
 // payload_t *getAccdata(payload_t *ptr);
 
-void *readAcc(payload_t *ptr);
+//void *readAcc(payload_t *ptr);
 void accIsr();
 
 

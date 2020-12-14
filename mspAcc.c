@@ -1,13 +1,6 @@
 #include "mspAcc.h"
 
-uint8_t is_connected()
-{
-    if(acc_read_register(LIS3DH_WHO_AM_I) == LIS3DH_DEVICE_ID){
-        return 1;
-    }else{
-        return 0;
-    }
-}
+
 
 void acc_begin(void)
 {
@@ -15,6 +8,10 @@ void acc_begin(void)
     ACC_PORT_SET();
     ACC_DISABLE();
 
+#ifndef SPI_INITIALIZED
+#define SPI_INITIALIZED
+    spi_begin();//begin SPI
+#endif
     // Disable FiFo and interrupt
     acc_write_register(LIS3DH_FIFO_CTRL_REG,BYPASS_MODE);
 
@@ -43,7 +40,15 @@ void acc_begin(void)
     //setting accelerometer range
 }
 
-
+bool acc_is_connected()
+{
+//    if(acc_read_register(LIS3DH_WHO_AM_I) == LIS3DH_DEVICE_ID){
+//        return 1;
+//    }else{
+//        return 0;
+//    }
+    return (acc_read_register(LIS3DH_WHO_AM_I) == LIS3DH_DEVICE_ID);
+}
 
 void acc_fifo_begin(void)
 {
@@ -80,9 +85,9 @@ void acc_clear_fifo(void)
 }
 void print_acc_xyx(uint8_t *buffer6)
 {
-    serial_print("\r\nX : ");serial_print_uint8(buffer6[1]);
-    serial_print(" | Y : "); serial_print_uint8(buffer6[3]);
-    serial_print(" | Z : "); serial_print_uint8(buffer6[5]);
+    serial_print_str("\r\nX : ");serial_print_int8(buffer6[1]);
+    serial_print_str(" | Y : "); serial_print_int8(buffer6[3]);
+    serial_print_str(" | Z : "); serial_print_int8(buffer6[5]);
 }
 
 void acc_fifoStartRec(void)

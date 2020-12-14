@@ -1,10 +1,10 @@
 #ifndef LIS3DH_DRIVER_H_
 #define LIS3DH_DRIVER_H_
-
 #include <stdint.h>
-#include "mspGeneral.h"
+#include <stdbool.h>
+#include <stddef.h>
+
 #include "acc_usr_conf.h"
-#include <mspSPI.h>
 #include "acc_register.h"
 
 
