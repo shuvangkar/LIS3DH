@@ -1,10 +1,22 @@
-#include "Acc.h"
+#include "mspAcc.h"
+
+uint8_t is_connected()
+{
+    if(acc_read_register(LIS3DH_WHO_AM_I) == LIS3DH_DEVICE_ID){
+        return 1;
+    }else{
+        return 0;
+    }
+}
 
 void acc_begin(void)
 {
     //Enable ACC port and set to high
     ACC_PORT_SET();
     ACC_DISABLE();
+
+    // Disable FiFo and interrupt
+    acc_write_register(LIS3DH_FIFO_CTRL_REG,BYPASS_MODE);
 
     //Enable Axis and Data Rate
 #if defined(LOW_POWER_MODE)
@@ -31,11 +43,13 @@ void acc_begin(void)
     //setting accelerometer range
 }
 
+
+
 void acc_fifo_begin(void)
 {
     uint8_t response;
     response = acc_read_register(LIS3DH_CTRL_REG5);
-    acc_write_register(LIS3DH_CTRL_REG5, (response & ~LIS3DH_SET_FIFO_ENA_STATUS) | LIS3DH_SET_FIFO_ENA_STATUS );
+    acc_write_register(LIS3DH_CTRL_REG5, (response | LIS3DH_SET_FIFO_ENA_STATUS ));
     acc_write_register(LIS3DH_FIFO_CTRL_REG, FIFO_BUFFER_MODE  |
                                              TRIG_INT_ON_INT1  );
 }
@@ -58,10 +72,17 @@ uint8_t acc_get_fifo_status(void)
 void acc_clear_fifo(void)
 {
     uint8_t buffer[6];
-    while( (acc_get_fifo_status() & 0x20 ) == 0 )
+    while( (acc_get_fifo_status() & FIFO_EMPTY_MASK) == 0 )
     {
-        acc_get_xyz(buffer);
+        // acc_get_xyz(buffer);
+        print_acc_xyx(acc_get_xyz(buffer));
     }
+}
+void print_acc_xyx(uint8_t *buffer6)
+{
+    serial_print("\r\nX : ");serial_print_uint8(buffer6[1]);
+    serial_print(" | Y : "); serial_print_uint8(buffer6[3]);
+    serial_print(" | Z : "); serial_print_uint8(buffer6[5]);
 }
 
 void acc_fifoStartRec(void)
@@ -76,11 +97,20 @@ void acc_fifoStartRec(void)
 
 void en_acc_int(void)
 {
+#if defined(ACC_PORT_DIR)
     P2DIR &= ~(ACC_INT1_PIN | ACC_INT2_PIN);            // set INT1 & INT2 as input
     P2OUT &=  ~(ACC_INT1_PIN | ACC_INT2_PIN);           // set INT1 & INT2 pulled high
     P2REN |=  (ACC_INT1_PIN | ACC_INT2_PIN);              //
     P2IES &=  ~(ACC_INT1_PIN | ACC_INT2_PIN);           // set INT1 & INT2 on falling edge
     P2IFG &= ~(ACC_INT1_PIN | ACC_INT2_PIN);            // clear interrupt on INT1 and IN2
     P2IE  |=  (ACC_INT1_PIN | ACC_INT2_PIN);              // enable INT1 & INT2 on Port2
+// #elif defined(ACC_PORT_DIR == P1DIR)
+//     P1DIR &= ~(ACC_INT1_PIN | ACC_INT2_PIN);            // set INT1 & INT2 as input
+//     P1OUT &=  ~(ACC_INT1_PIN | ACC_INT2_PIN);           // set INT1 & INT2 pulled high
+//     P1REN |=  (ACC_INT1_PIN | ACC_INT2_PIN);              //
+//     P1IES &=  ~(ACC_INT1_PIN | ACC_INT2_PIN);           // set INT1 & INT2 on falling edge
+//     P1IFG &= ~(ACC_INT1_PIN | ACC_INT2_PIN);            // clear interrupt on INT1 and IN2
+//     P1IE  |=  (ACC_INT1_PIN | ACC_INT2_PIN);              // enable INT1 & INT2 on Port2
+#endif
     _EINT();                            // Enable interrupts (set GIE in SR)
 }

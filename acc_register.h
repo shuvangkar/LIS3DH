@@ -61,11 +61,15 @@
 #define LIS3DH_FIFO_OVRN_FIFO         0b01000000
 
 /*****************Configuration Masking****************************/
+/*****************WHO AM I *********************/
+#define LIS3DH_DEVICE_ID			0b00110011
+
 /*****************CTRL_REG1*********************/
 #define LIS3DH_ENABLE_X_AXIS        (1<<0)
 #define LIS3DH_ENABLE_Y_AXIS        (1<<1)
 #define LIS3DH_ENABLE_Z_AXIS        (1<<2)
 #define LIS3DH_ENA_LOW_POW_MODE     (1<<3)
+
 /*****************ACC Data acquisition rate************************/
 // 0x00=Power Down Mode; 0x01=1Hz; 0x02=10Hz; 0x03=25Hz; 0x04=50Hz; 0x05=100Hz; 0x06=200Hz; 0x07=400Hz; 0x08=Low Power Mode(1.6KHz); 0x09=HR/normal(1.344KHz)/Low-power mode (5.376KHz)
 #define DATA_RATE_1HZ               (0b0001<<4)
@@ -77,16 +81,19 @@
 #define HIGH_RES_ENABLE             (1<<3)
 #define HIGH_RES_DISABLE            (0<<3)
 
-/*************CTRL_REG5************************/
+/*****************CTRL_REG5*********************/
 #define FIFO_ENA                    (1<<6)
 #define FIFO_DISABLE                (0<<6)
-/*************FIFO_CTRL_REG********************/
+/**************FIFO_CTRL_REG********************/
 #define BYPASS_MODE                 (0b00<<6)
 #define FIFO_MODE                   (0b01<<6)
 #define STREAM_MODE                 (0b10<<6)
 #define STREAM_TO_FIFO              (0b11<<6)
 
-/************Interrupt Mode******************/
+/**************FIFO_SRC_REG********************/
+#define FIFO_EMPTY_MASK				0x20
+
+/**************Interrupt Mode******************/
 #define ENA_OVERRUN_INT1            (1<<1)
 #define ENA_WATERMARK_INT1          (1<<2)
 

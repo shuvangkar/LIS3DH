@@ -3,6 +3,13 @@
 
 #include "acc_register.h"
 
+/*********** ACC Pin Conf*************/
+#define ACC_PORT_DIR     			P2DIR
+#define ACC_PORT_OUT    			P2OUT
+#define ACC_PIN          			BIT5
+#define ACC_INT1_PIN                BIT3
+#define ACC_INT2_PIN                BIT4
+
 #define LOW_POWER_MODE //This macro sets ACC LOW power mode. to enable high resolution mode comment this
 #define LIS3DH_DATA_RATE            DATA_RATE_10HZ
 
@@ -15,8 +22,8 @@
 #define TRIG_INT_ON_INT1            (0<<5)
 #define TRIG_INT_ON_INT2            (1<<5)
 
-#define ACC_INT1_PIN                BIT3
-#define ACC_INT2_PIN                BIT4
+
 //#define ACC_INT_DEBUG_ON
 
-#endif /* ACC_USR_CONF_H_ */
+#endif
+
