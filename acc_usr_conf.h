@@ -20,7 +20,7 @@
 #endif
 
 #define LOW_POWER_MODE              //This macro sets ACC LOW power mode. to enable high resolution mode comment this
-#define LIS3DH_DATA_RATE            DATA_RATE_10HZ
+#define LIS3DH_DATA_RATE            DATA_RATE_1HZ
 
 #define LIS3DH_SET_FIFO_ENA_STATUS  FIFO_ENA
 

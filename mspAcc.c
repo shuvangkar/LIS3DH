@@ -1,4 +1,5 @@
 #include "mspAcc.h"
+#include "mspFlash.h"
 
 
 
@@ -76,6 +77,10 @@ uint8_t acc_get_fifo_status(void)
 
 void acc_clear_fifo(void)
 {
+#if defined(MSPFLASHMEMORY_MSPFLASH_H_)
+    flashHold();
+#endif
+
     SerialPrint("\r\nInterrupt triggerred");
     SerialPrint("\r\n ACC FIFO Status: ");
     SerialPrintU8(acc_get_fifo_status() & 0x1F);
@@ -85,6 +90,9 @@ void acc_clear_fifo(void)
         acc_get_xyz(buffer);
         print_acc_xyx(acc_get_xyz(buffer));
     }
+#if defined(MSPFLASHMEMORY_MSPFLASH_H_)
+    flashHoldRelease();
+#endif
 }
 void print_acc_xyx(uint8_t *buffer6)
 {
@@ -106,8 +114,10 @@ void acc_shutDown(void)
 {
     uint8_t response;
     response = acc_read_register(LIS3DH_CTRL_REG1);
-    response &= 0x0F;
-    acc_write_register(LIS3DH_CTRL_REG1,response);
+//    response &= 0x0F;
+    acc_write_register(LIS3DH_CTRL_REG1, response & 0x0F);
+//    response = acc_read_register(LIS3DH_CTRL_REG1);
+//    SerialPrint("\r\nACC CTRL REG1 : ");SerialPrintU8(response);
 }
 
 
