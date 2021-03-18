@@ -3,6 +3,7 @@
 
 #include <msp430.h>
 #include "acc_driver.h"
+#include "mspDriver.h"
 
 
 
@@ -20,5 +21,7 @@ void acc_fifoStartRec(void);
 unsigned int acc_readRawAccelX(void);
 unsigned int acc_readRawAccelX(void);
 unsigned int acc_readRawAccelX(void);
+
+void acc_shutDown(void);
 
 #endif /* ACC_LIS3DH_H_ */
