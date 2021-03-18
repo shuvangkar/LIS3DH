@@ -10,7 +10,7 @@ void acc_begin(void)
 
 #ifndef SPI_INITIALIZED
 #define SPI_INITIALIZED
-    spi_begin();//begin SPI
+    spi_begin(1000000);//begin SPI
 #endif
     // Disable FiFo and interrupt
     acc_write_register(LIS3DH_FIFO_CTRL_REG,BYPASS_MODE);
@@ -85,9 +85,9 @@ void acc_clear_fifo(void)
 }
 void print_acc_xyx(uint8_t *buffer6)
 {
-    serial_print_str("\r\nX : ");serial_print_int8(buffer6[1]);
-    serial_print_str(" | Y : "); serial_print_int8(buffer6[3]);
-    serial_print_str(" | Z : "); serial_print_int8(buffer6[5]);
+    SerialPrint("X : ");    SerialPrintU8(buffer6[1]);
+    SerialPrint(" | Y : "); SerialPrintU8(buffer6[3]);
+    SerialPrint(" | Z : "); SerialPrintlnU8(buffer6[5]);
 }
 
 void acc_fifoStartRec(void)
