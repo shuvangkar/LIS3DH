@@ -1,5 +1,5 @@
 #include "mspAcc.h"
-#include "mspFlash.h"
+#include "mspIoT.h"
 
 
 
@@ -78,7 +78,7 @@ uint8_t acc_get_fifo_status(void)
 void acc_clear_fifo(void)
 {
 #if defined(MSPFLASHMEMORY_MSPFLASH_H_)
-    flashHold();
+//    flashHold();
 #endif
 
     SerialPrint("\r\nInterrupt triggerred");
@@ -91,7 +91,7 @@ void acc_clear_fifo(void)
         print_acc_xyx(acc_get_xyz(buffer));
     }
 #if defined(MSPFLASHMEMORY_MSPFLASH_H_)
-    flashHoldRelease();
+//    flashHoldRelease();
 #endif
 }
 void print_acc_xyx(uint8_t *buffer6)
